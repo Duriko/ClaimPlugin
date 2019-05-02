@@ -1,0 +1,4 @@
+name: plugin
+version: ${project.version}
+main: org.spigotmc.plugin
+api-version: 1.13

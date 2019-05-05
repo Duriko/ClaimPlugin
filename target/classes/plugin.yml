@@ -1,0 +1,12 @@
+name: plugin
+version: 1.0-SNAPSHOT
+main: org.spigotmc.plugin
+api-version: 1.13
+
+commands:
+  bmessage:
+  xp:
+  test:
+  day:
+  sun:
+  spawn:

@@ -46,7 +46,6 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
         if(label.equalsIgnoreCase("xp")) {
             if (sender instanceof Player) {
                 player = (Player) sender;
-
                 player.giveExpLevels(500);
                 player.sendMessage("Test");
             }

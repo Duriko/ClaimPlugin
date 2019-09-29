@@ -1,7 +1,8 @@
 name: plugin
 version: ${project.version}
 main: org.spigotmc.plugin
-api-version: 1.13
+api-version: 1.14
+depend: [WorldGuard, WorldEdit]
 
 commands:
   bmessage:
@@ -10,3 +11,4 @@ commands:
   day:
   sun:
   spawn:
+  claim:

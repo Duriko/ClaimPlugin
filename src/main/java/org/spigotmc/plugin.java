@@ -14,9 +14,6 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.*;
 import org.bukkit.*;
 import org.bukkit.ChatColor;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -31,6 +28,9 @@ import java.util.Map;
 public final class plugin extends JavaPlugin implements CommandExecutor {
 
     private JumpingListener jp;
+
+    private String prefix = ChatColor.WHITE+"["+ChatColor.YELLOW+"Claim"+ChatColor.WHITE+"] "+ChatColor.YELLOW;
+
     private static Player player;
 
     public WorldEditPlugin getWorldedit(){
@@ -57,36 +57,37 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                          * To remove a claim you must stand in the claim.
                          * To remove a claim use the command /claim remove <claimname>
                          **/
-
-                        if (args[0].equalsIgnoreCase("remove"))
+                        if (args[0].equalsIgnoreCase("remove")) {
                             if (args.length >= 2 && args[1] != null) {
                                 ApplicableRegionSet regionList = regionManager.getApplicableRegions(BlockVector3.at(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ()));
                                 for (ProtectedRegion region : regionList) {
                                     if (region.getId().equalsIgnoreCase("claim_" + player.getName() + "_" + args[1])) {
                                         regionManager.removeRegion("claim_" + player.getName() + "_" + args[1]);
-                                        player.sendMessage(ChatColor.YELLOW + "Claim " + args[1] + " has been removed!");
+                                        player.sendMessage(prefix + "Claim " + args[1] + " has been removed!");
                                         return true;
                                     } else {
-                                        player.sendMessage(ChatColor.YELLOW + "No claim with that name found! " + "claim_" + player.getName() + "_" + args[1]);
+                                        player.sendMessage(prefix + "No claim with that name found! " + "claim_" + player.getName() + "_" + args[1]);
                                         return false;
                                     }
                                 }
-                                player.sendMessage(ChatColor.YELLOW+"No claim with the name: " + args[1] + " exists!");
+                                player.sendMessage(prefix + "No claim with the name: " + args[1] + " exists!");
                                 return false;
                             } else {
-                                player.sendMessage(ChatColor.YELLOW+"You need to specify the claim name!");
+                                player.sendMessage(prefix + "You need to specify the claim name!");
                                 return false;
                             }
+                        }
+
                         /**
                          * Get a list of players claims
                          **/
                         if (args[0].equalsIgnoreCase("list")){
                             List<ProtectedRegion> playersClaim = new ArrayList<>();
-                            player.sendMessage(ChatColor.YELLOW+"Your claims:");
+                            player.sendMessage(prefix+"Your claims:");
                             for (ProtectedRegion region : regionManager.getRegions().values()){
                                 if (region.getId().contains("claim_"+player.getName())) {
                                     playersClaim.add(region);
-                                    player.sendMessage(ChatColor.YELLOW + region.getId());
+                                    player.sendMessage(prefix + region.getId());
                                 }
                             }
                         }
@@ -95,12 +96,11 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                          * To show information about a claim, the player must stand
                          * in the claim and use the /claim info command
                          **/
-
                         if (args[0].equalsIgnoreCase("info")){
                             ApplicableRegionSet regionList = regionManager.getApplicableRegions(BlockVector3.at(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ()));
                             for (ProtectedRegion region : regionList) {
                                 if (region.getOwners().contains(player.getName())) {
-                                    player.sendMessage(ChatColor.YELLOW + "Claim information:");
+                                    player.sendMessage(prefix + "Claim information:");
                                     player.sendMessage(ChatColor.YELLOW + "Claim id: " + region.getId());
                                     player.sendMessage(ChatColor.YELLOW + "Claim coords: " + region.getMinimumPoint() + " - " + region.getMaximumPoint());
                                     String tmp = "";
@@ -125,29 +125,97 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                          **/
                         if (args[0].equalsIgnoreCase("create")){
                             try {
-                                BlockVector3 p1 = regionSelector.getRegion().getMinimumPoint();
-                                BlockVector3 p2 = regionSelector.getRegion().getMaximumPoint();
-                                for(ProtectedRegion region : regionManager.getRegions().values()){
-                                    if(region.contains(p1) || region.contains(p2)){
-                                        player.sendMessage(ChatColor.YELLOW+"Claim overlaps with another claim! (" + region.getId()+")");
-                                        return false;
+                                if (args.length >= 2 && args[1] != null) {
+                                    BlockVector3 p1 = regionSelector.getRegion().getMinimumPoint();
+                                    BlockVector3 p2 = regionSelector.getRegion().getMaximumPoint();
+                                    for(ProtectedRegion region : regionManager.getRegions().values()){
+                                        if(region.contains(p1) || region.contains(p2)){
+                                            player.sendMessage(prefix+"Claim overlaps with another claim! (" + region.getId()+")");
+                                            return false;
+                                        }
                                     }
-                                }
-                                if(regionManager.getRegion("claim_"+player.getName()+"_"+args[0]) == (null)){
-                                    regionManager.getRegion("claim_"+player.getName()+"_"+args[0]);
-                                    ProtectedRegion region = new ProtectedCuboidRegion("claim_"+player.getName()+"_"+args[0],
-                                            BlockVector3.at(p1.getBlockX(), 0, p1.getBlockZ()), BlockVector3.at(p2.getBlockX(), 255, p2.getBlockZ()));
-                                    regionManager.addRegion(region);
-                                    region.setFlag(Flags.PVP, StateFlag.State.DENY);
-                                    region.setFlag(Flags.BUILD, StateFlag.State.DENY);
-                                    DefaultDomain owner = region.getOwners();
-                                    owner.addPlayer(player.getName());
-                                    region.setOwners(owner);
-                                    player.sendMessage("Claim " + "claim_"+player.getName()+"_"+args[0] + " created!");
+                                    if(regionManager.getRegion("claim_"+player.getName()+"_"+args[1]) == (null)){
+                                        ProtectedRegion region = new ProtectedCuboidRegion("claim_"+player.getName()+"_"+args[1],
+                                                BlockVector3.at(p1.getBlockX(), 0, p1.getBlockZ()), BlockVector3.at(p2.getBlockX(), 255, p2.getBlockZ()));
+                                        regionManager.addRegion(region);
+                                        region.setFlag(Flags.PVP, StateFlag.State.DENY);
+                                        region.setFlag(Flags.BUILD, StateFlag.State.DENY);
+                                        DefaultDomain owner = region.getOwners();
+                                        owner.addPlayer(player.getName());
+                                        region.setOwners(owner);
+                                        player.sendMessage(prefix+"Claim " +region.getId()+ " created!");
+                                    } else
+                                        player.sendMessage(prefix+"Claim with that name already exist");
                                 } else
-                                    player.sendMessage("Claim with that name already exist");
+                                    player.sendMessage(prefix+"You must specify a claim name!");
                             } catch (NullPointerException ne) { }
                             catch (Exception ex){ }
+                        }
+
+                        /**
+                         * To add or remove a member from a claim,
+                         * the player must use the command
+                         * /claim add/removemember <playerToRemove> <claimName>
+                         *      Example: /claim addmember goppi house
+                         **/
+                        if (args[0].equalsIgnoreCase("addmember")){
+                            if (args.length >= 3 && (args[1] != null && args[2] != null)) {
+                                if (regionManager.getRegion("claim_"+player.getName()+"_"+args[2]) != null){
+                                    regionManager.getRegion("claim_"+player.getName()+"_"+args[2]).getMembers().addPlayer(args[1]);
+                                    player.sendMessage(ChatColor.YELLOW+"Added " + args[1] + "to the claim!");
+                                } else {
+                                    player.sendMessage(ChatColor.YELLOW+"No claim with that name exist!");
+                                }
+                            }
+                        }
+                        if (args[0].equalsIgnoreCase("removemember")){
+                            if (args.length >= 3 && (args[1] != null && args[2] != null)) {
+                                if (regionManager.getRegion("claim_"+player.getName()+"_"+args[2]) != null){
+                                    regionManager.getRegion("claim_"+player.getName()+"_"+args[2]).getMembers().removePlayer(args[1]);
+                                    player.sendMessage(ChatColor.YELLOW+"Removed " + args[1] + " to the claim!");
+                                } else
+                                    player.sendMessage(ChatColor.YELLOW+"No claim with that name exist!");
+                            }
+                        }
+
+                        /**
+                         * To set or remove a falg from a claim the player must
+                         * use the /claim set/removeflag command.
+                         * Parameters: /claim setflag <flag> <value> <claimname>
+                         *     Example: /claim setflag pvp deny house
+                         **/
+                        if (args[0].equalsIgnoreCase("setflag")){
+                            if (args.length >= 4 && (args[1] != null && args[2] != null && args[3] != null)){
+                                if (regionManager.getRegion("claim_"+player.getName()+"_"+args[3]) != null){
+                                     boolean removeflag = false;
+                                     StateFlag.State stateFlag = StateFlag.State.DENY;
+                                     StateFlag flag = null;
+                                     if (args[2].equalsIgnoreCase("true") || args[2].equalsIgnoreCase("allow"))
+                                         stateFlag = StateFlag.State.ALLOW;
+                                    switch (args[1]){
+                                        case "pvp":
+                                            flag = Flags.PVP;
+                                            break;
+                                        case "build":
+                                            flag = Flags.BUILD;
+                                            break;
+                                        case "entry":
+                                            flag = Flags.ENTRY;
+                                            break;
+                                        case "use":
+                                            flag = Flags.USE;
+                                            break;
+                                    }
+                                    if (removeflag){
+                                        regionManager.getRegion("claim_"+player.getName()+"_"+args[3]).getFlags().remove(flag);
+                                        player.sendMessage(prefix+"Removed flag: " + args[1]);
+                                    }
+                                    else{
+                                        regionManager.getRegion("claim_"+player.getName()+"_"+args[3]).setFlag(flag, stateFlag);
+                                        player.sendMessage(prefix+"Flag " + args[1] + " set to " + args[2] );
+                                    }
+                                }
+                            }
                         }
                     }
 

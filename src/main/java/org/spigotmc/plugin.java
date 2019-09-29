@@ -54,24 +54,18 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                     if(args[0]!=null){
 
                         /**
-                         * To remove a claim you must stand in the claim.
                          * To remove a claim use the command /claim remove <claimname>
                          **/
                         if (args[0].equalsIgnoreCase("remove")) {
                             if (args.length >= 2 && args[1] != null) {
-                                ApplicableRegionSet regionList = regionManager.getApplicableRegions(BlockVector3.at(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ()));
-                                for (ProtectedRegion region : regionList) {
-                                    if (region.getId().equalsIgnoreCase("claim_" + player.getName() + "_" + args[1])) {
-                                        regionManager.removeRegion("claim_" + player.getName() + "_" + args[1]);
-                                        player.sendMessage(prefix + "Claim " + args[1] + " has been removed!");
-                                        return true;
-                                    } else {
-                                        player.sendMessage(prefix + "No claim with that name found! " + "claim_" + player.getName() + "_" + args[1]);
-                                        return false;
-                                    }
+                                if (regionManager.getRegion("claim_"+player.getName()+"_"+args[1]) != null){
+                                    regionManager.removeRegion("claim_" + player.getName() + "_" + args[1]);
+                                    player.sendMessage(prefix + "Claim " + args[1] + " has been removed!");
+                                    return true;
+                                } else{
+                                    player.sendMessage(prefix + "No claim with that name found! " + "claim_" + player.getName() + "_" + args[1]);
+                                    return false;
                                 }
-                                player.sendMessage(prefix + "No claim with the name: " + args[1] + " exists!");
-                                return false;
                             } else {
                                 player.sendMessage(prefix + "You need to specify the claim name!");
                                 return false;
@@ -242,8 +236,8 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        jp = new JumpingListener();
-        getServer().getPluginManager().registerEvents(jp, this);
+        //jp = new JumpingListener();
+        //getServer().getPluginManager().registerEvents(jp, this);
     }
 
 

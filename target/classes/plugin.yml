@@ -1,14 +1,9 @@
-name: plugin
+name: Claimplugin
 version: 1.0-SNAPSHOT
 main: org.spigotmc.plugin
 api-version: 1.14
-depend: [WorldGuard, WorldEdit]
+depend: [WorldGuard, WorldEdit, ]
 
 commands:
-  bmessage:
-  xp:
-  test:
-  day:
-  sun:
-  spawn:
   claim:
+  claimadmin:

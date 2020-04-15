@@ -21,6 +21,15 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../plugins/WorldGuardExtraFlags.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot-api:1.13.2-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" level="project" />
@@ -48,5 +57,6 @@
     <orderEntry type="library" name="Maven: com.sk89q.worldguard.worldguard-libs:core:7.0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.flywaydb:flyway-core:3.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.sk89q:commandbook:2.3" level="project" />
+    <orderEntry type="library" name="Maven: net.milkbowl.vault:Vault:1.7.3" level="project" />
   </component>
 </module>

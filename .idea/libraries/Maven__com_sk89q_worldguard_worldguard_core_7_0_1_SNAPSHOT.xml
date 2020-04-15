@@ -4,13 +4,13 @@
       <root url="file://$PROJECT_DIR$/../plugins" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/sk89q/worldguard/worldguard-core/7.0.1-SNAPSHOT/worldguard-core-7.0.1-20190918.194530-43.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/sk89q/worldguard/worldguard-core/7.0.1-SNAPSHOT/worldguard-core-7.0.1-20191117.231506-50.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$MAVEN_REPOSITORY$/com/sk89q/worldguard/worldguard-core/7.0.1-SNAPSHOT/worldguard-core-7.0.1-20190918.194530-43-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/sk89q/worldguard/worldguard-core/7.0.1-SNAPSHOT/worldguard-core-7.0.1-20191117.231506-50-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/sk89q/worldguard/worldguard-core/7.0.1-SNAPSHOT/worldguard-core-7.0.1-20190918.194530-43-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/sk89q/worldguard/worldguard-core/7.0.1-SNAPSHOT/worldguard-core-7.0.1-20191117.231506-50-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

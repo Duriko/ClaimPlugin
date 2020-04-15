@@ -11,6 +11,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="plugin" target="1.8" />
+      <module name="WG6" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

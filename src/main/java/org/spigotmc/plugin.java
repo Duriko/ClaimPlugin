@@ -45,6 +45,7 @@ import java.util.UUID;
 public final class plugin extends JavaPlugin implements CommandExecutor {
 
     private static final String prefix = ChatColor.WHITE+"["+ChatColor.YELLOW+"Claim"+ChatColor.WHITE+"] "+ChatColor.YELLOW;
+    private static final String adminPrefix = ChatColor.WHITE+"["+ChatColor.YELLOW+"ClaimAdmin"+ChatColor.WHITE+"] "+ChatColor.YELLOW;
     private Player player;
     private Economy economy;
     private ConfigurationSection configurationSection;
@@ -93,14 +94,69 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
             if (sender instanceof Player) {
                 player = (Player) sender;
                 if(player.hasPermission("claimplugin.admin")) {
+                    final RegionContainer regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
+                    final RegionManager regionManager = regionContainer.get(BukkitAdapter.adapt(player.getWorld()));
+
                     if (args[0] != null) {
+                        if (args[0].equalsIgnoreCase("fixowners")) {
+                            player.sendMessage("a");
+                            for (final ProtectedRegion region : regionManager.getRegions().values()) {
+                                if (region.getId().startsWith("claim_")) {
+                                    final String uuid = region.getId().split("_")[1];
+                                    final DefaultDomain owners = region.getOwners();
+                                    player.sendMessage("uuid: " + uuid + ", region: " + region.getId().split("_")[2]);
+                                    owners.addPlayer(Bukkit.getOfflinePlayer(UUID.fromString(uuid)).getName());
+                                    region.setOwners(owners);
+                                }
+                            }
+                        }
                         /**
                          * Reload configuration
                          **/
                         if (args[0].equalsIgnoreCase("reload")) {
                             reloadConfig();
                             loadConfig();
-                            player.sendMessage(prefix + "Reloaded.");
+                            player.sendMessage(adminPrefix + "Reloaded.");
+                        }
+                        /**
+                         * To set owne of a claim the admin must stand in the claim
+                         * and use the /claimadmin setowener <playername>
+                         * Example: /claimadmin setowner goppi
+                         **/
+                        if (args[0].equalsIgnoreCase("setowner")) {
+                            if(args[1] != null){
+                                final ApplicableRegionSet regionList = regionManager.getApplicableRegions(BlockVector3.at(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ()));
+                                if(!regionList.getRegions().isEmpty())
+                                    for (final ProtectedRegion region : regionList) {
+                                        if (region.getId().startsWith("claim_")) {
+                                            final DefaultDomain owners = region.getOwners();
+                                            owners.addPlayer(args[1]);
+                                            region.setOwners(owners);
+                                            region.getOwners();
+                                            player.sendMessage(adminPrefix+"Added " + args[1]+ " as owner to " + region.getId() + "!");
+                                            return true;
+                                        }
+                                        player.sendMessage(adminPrefix+"Not standing in a claim!");
+                                    }
+                                else
+                                    player.sendMessage(adminPrefix + "No claim here cunt. Please move on.");
+                            }
+                        }
+                        if (args[0].equalsIgnoreCase("removeowner")) {
+                            if(args[1] != null){
+                                final ApplicableRegionSet regionList = regionManager.getApplicableRegions(BlockVector3.at(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ()));
+                                if(!regionList.getRegions().isEmpty())
+                                    for (final ProtectedRegion region : regionList) {
+                                        if (region.getId().startsWith("claim_")) {
+                                            region.getOwners().removePlayer(args[1]);
+                                            player.sendMessage(adminPrefix+"Removed owner: " + args[1]+ " from " + region.getId() + "!");
+                                            return true;
+                                        }
+                                        player.sendMessage(adminPrefix+"Not standing in a claim!");
+                                    }
+                                else
+                                    player.sendMessage(adminPrefix + "No claim here cunt. Please move on.");
+                            }
                         }
                         if (args[0].equalsIgnoreCase("migratePlayers")) {
                             final File files = new File(Bukkit.getServer().getPluginManager().getPlugin("Claimplugin").getDataFolder()+"/migrate/players/");
@@ -139,8 +195,6 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                             player.sendMessage(prefix + "Migrated player data.");
                         }
                         if (args[0].equalsIgnoreCase("migrateClaims")) {
-                            final RegionContainer regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
-                            final RegionManager regionManager = regionContainer.get(BukkitAdapter.adapt(player.getWorld()));
                             final File files = new File(Bukkit.getServer().getPluginManager().getPlugin("Claimplugin").getDataFolder()+"/migrate/claims/");
                             for(final File file : files.listFiles()) {
                                 System.out.println("Working with file: " + file.getName()) ;
@@ -294,20 +348,22 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                                             } else
                                                 region.setPriority(1);
                                             final int regionSize = region.volume() / 256;
-                                            if (totalClaimBlocksInUse + regionSize <= totalClaimBlocks) {
-                                                regionManager.addRegion(region);
-                                                final DefaultDomain owner = region.getOwners();
-                                                owner.addPlayer(player.getName());
-                                                region.setOwners(owner);
-                                                player.sendMessage(prefix + "Claim " + region.getId().split("_" + player.getUniqueId() + "_")[1] + " created!");
-                                                final List<String> claims = (List<String>) playerConfig.getList("player.claims");
-                                                claims.add("claim_" + player.getUniqueId().toString() + "_" + args[1]);
-                                                playerConfig.set("player.claims", claims);
-                                                playerConfig.set("player.totalClaimBlocksInUse", totalClaimBlocksInUse + (region.volume() / 256));
-                                                saveToFile(playerConfig, player);
-                                            } else {
-                                                player.sendMessage(prefix + "Not enough claimblocks! You need " + ((totalClaimBlocksInUse+regionSize)-totalClaimBlocks) + " blocks more!");
-                                            }
+                                            if(regionSize > 50){
+                                                if (totalClaimBlocksInUse + regionSize <= totalClaimBlocks) {
+                                                    regionManager.addRegion(region);
+                                                    final DefaultDomain owner = region.getOwners();
+                                                    owner.addPlayer(player.getName());
+                                                    region.setOwners(owner);
+                                                    player.sendMessage(prefix + "Claim " + region.getId().split("_" + player.getUniqueId() + "_")[1] + " created!");
+                                                    final List<String> claims = (List<String>) playerConfig.getList("player.claims");
+                                                    claims.add("claim_" + player.getUniqueId().toString() + "_" + args[1]);
+                                                    playerConfig.set("player.claims", claims);
+                                                    playerConfig.set("player.totalClaimBlocksInUse", totalClaimBlocksInUse + (region.volume() / 256));
+                                                    saveToFile(playerConfig, player);
+                                                } else
+                                                    player.sendMessage(prefix + "Not enough claimblocks! You need " + ((totalClaimBlocksInUse + regionSize) - totalClaimBlocks) + " blocks more!");
+                                            }else
+                                                player.sendMessage(prefix+"Claim not big enough!");
                                         } else {
                                             player.sendMessage(prefix + "Claim with that name already exist");
                                         }
@@ -461,7 +517,6 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                                                 return false;
                                             }
                                         }
-                                        player.sendMessage("stateflag;: " + stateFlag.toString());
                                         regionManager.getRegion("claim_" + player.getUniqueId().toString() + "_" + claimName).setFlags(mapFlags);
                                         player.sendMessage(prefix + "Flag " + flagName + " set to " + flagValue);
                                     }

@@ -6,9 +6,10 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="74ae4e79-0e78-4036-82d6-393fc7930edd" name="Default Changelist" comment="">
+    <list default="true" id="74ae4e79-0e78-4036-82d6-393fc7930edd" name="Default Changelist" comment="Lite smått o gott">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/spigotmc/plugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/spigotmc/plugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/spigotmc/plugin.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/spigotmc/plugin.class" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -32,8 +33,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/spigotmc/plugin.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="449">
-              <caret line="383" column="41" selection-start-line="383" selection-start-column="41" selection-end-line="383" selection-end-column="41" />
+            <state relative-caret-position="207">
+              <caret line="419" column="124" lean-forward="true" selection-start-line="419" selection-start-column="124" selection-end-line="419" selection-end-column="124" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -79,7 +80,6 @@
       <find>config</find>
       <find>configurationSection</find>
       <find>cla</find>
-      <find>list</find>
       <find>getPlayerFile</find>
       <find>save</find>
       <find>totalClaimBlocksInUse</find>
@@ -88,6 +88,9 @@
       <find>plugin</find>
       <find>pl§</find>
       <find>sam</find>
+      <find>list</find>
+      <find>setowen</find>
+      <find>setowner</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -426,7 +429,14 @@
       <option name="project" value="LOCAL" />
       <updated>1586969510216</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Lite smått o gott">
+      <created>1587138080149</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1587138080149</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TodoView" selected-index="3">
@@ -457,9 +467,9 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4989339" weight="0.32936078" />
       <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49626866" weight="0.32936078" />
-      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.30490404" side_tool="true" visible="true" weight="0.27410617" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.31716418" side_tool="true" visible="true" weight="0.27410617" />
       <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.7420043" weight="0.2892741" />
-      <window_info active="true" anchor="bottom" id="Messages" order="10" sideWeight="0.69509596" visible="true" weight="0.27410617" />
+      <window_info active="true" anchor="bottom" id="Messages" order="10" sideWeight="0.6828358" visible="true" weight="0.27410617" />
       <window_info active="true" anchor="bottom" id="GitHub Pull Requests" order="11" sideWeight="0.49946696" weight="0.32936078" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -528,7 +538,8 @@
     <MESSAGE value="Added removal/adding of members to claims&#10;Added setflag options for pvp/build/entry/use&#10;Buggfixes" />
     <MESSAGE value="No longer have to stand in claim to remove it." />
     <MESSAGE value="Some stuff" />
-    <option name="LAST_COMMIT_MESSAGE" value="Some stuff" />
+    <MESSAGE value="Lite smått o gott" />
+    <option name="LAST_COMMIT_MESSAGE" value="Lite smått o gott" />
   </component>
   <component name="editorHistoryManager">
     <entry file="jar://$MAVEN_REPOSITORY$/com/sk89q/worldguard/worldguard-core/7.0.1-SNAPSHOT/worldguard-core-7.0.1-20190918.194530-43-sources.jar!/com/sk89q/worldguard/protection/managers/storage/RegionDatabase.java">
@@ -820,8 +831,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/spigotmc/plugin.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="449">
-          <caret line="383" column="41" selection-start-line="383" selection-start-column="41" selection-end-line="383" selection-end-column="41" />
+        <state relative-caret-position="207">
+          <caret line="419" column="124" lean-forward="true" selection-start-line="419" selection-start-column="124" selection-end-line="419" selection-end-column="124" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

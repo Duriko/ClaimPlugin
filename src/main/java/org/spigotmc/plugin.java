@@ -171,7 +171,6 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                                         region.setPriority(2);
                                         region.setParent(regionManager.getRegion("claim_"+parentClaimConfig.get("Owner")+"_"+parentClaim));
                                         region.setFlag(Flags.PVP, StateFlag.State.DENY);
-                                        region.setFlag(Flags.BUILD, StateFlag.State.DENY);
                                         regionManager.addRegion(region);
                                     } else {
                                         playerConfig = YamlConfiguration.loadConfiguration(
@@ -363,25 +362,28 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                                     }
                                 } else {
                                     final ApplicableRegionSet regionList = regionManager.getApplicableRegions(BlockVector3.at(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ()));
-                                    for (final ProtectedRegion region : regionList) {
-                                        if (region.getOwners().contains(player.getName())) {
-                                            player.sendMessage(prefix + "Claim information:");
-                                            player.sendMessage(ChatColor.YELLOW + "Claim id: " + region.getId().split("_" + player.getUniqueId() + "_")[1]);
-                                            if(region.getParent() != null)
-                                                player.sendMessage(ChatColor.YELLOW + "Claim parent: " + region.getParent().getId().split("_" + player.getUniqueId() + "_")[1]);
-                                            player.sendMessage(ChatColor.YELLOW + "Claim coords: " + region.getMinimumPoint() + " - " + region.getMaximumPoint());
-                                            String tmp = "";
-                                            final Map map = region.getFlags();
-                                            for (final Flag flag : region.getFlags().keySet()) {
-                                                map.get(flag);
-                                                tmp += flag.getName() + ": " + map.get(flag) + "; ";
+                                    if(!regionList.getRegions().isEmpty())
+                                        for (final ProtectedRegion region : regionList) {
+                                            if (region.getId().startsWith("claim_")) {
+                                                player.sendMessage(prefix + "Claim information:");
+                                                player.sendMessage(ChatColor.YELLOW + "Claim id: " + region.getId().substring(43, region.getId().length()));
+                                                if (region.getParent() != null)
+                                                    player.sendMessage(ChatColor.YELLOW + "Claim parent: " + region.getParent().getId().split("_" + player.getUniqueId() + "_")[1]);
+                                                player.sendMessage(ChatColor.YELLOW + "Claim coords: " + region.getMinimumPoint() + " - " + region.getMaximumPoint());
+                                                String tmp = "";
+                                                final Map map = region.getFlags();
+                                                for (final Flag flag : region.getFlags().keySet()) {
+                                                    map.get(flag);
+                                                    tmp += flag.getName() + ": " + map.get(flag) + "; ";
+                                                }
+                                                player.sendMessage(ChatColor.YELLOW + "Claim flags: " + tmp);
+                                                player.sendMessage(ChatColor.YELLOW + "Claim owner: " + region.getOwners().getPlayers());
+                                                player.sendMessage(ChatColor.YELLOW + "Claim members: " + region.getMembers().getPlayers());
+                                                return true;
                                             }
-                                            player.sendMessage(ChatColor.YELLOW + "Claim flags: " + tmp);
-                                            player.sendMessage(ChatColor.YELLOW + "Claim owner: " + region.getOwners().getPlayers());
-                                            player.sendMessage(ChatColor.YELLOW + "Claim members: " + region.getMembers().getPlayers());
-                                            return true;
                                         }
-                                    }
+                                    else
+                                        player.sendMessage(prefix + "No claim here cunt. Please move on.");
                                 }
                             }
                             /**

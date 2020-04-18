@@ -6,7 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="74ae4e79-0e78-4036-82d6-393fc7930edd" name="Default Changelist" comment="Lite smått o gott">
+    <list default="true" id="74ae4e79-0e78-4036-82d6-393fc7930edd" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/spigotmc/plugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/spigotmc/plugin.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/org/spigotmc/plugin.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/spigotmc/plugin.class" afterDir="false" />
@@ -33,8 +33,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/spigotmc/plugin.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="419" column="124" lean-forward="true" selection-start-line="419" selection-start-column="124" selection-end-line="419" selection-end-column="124" />
+            <state relative-caret-position="1013">
+              <caret line="712" column="32" lean-forward="true" selection-start-line="712" selection-start-column="32" selection-end-line="712" selection-end-column="32" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -80,7 +80,6 @@
       <find>config</find>
       <find>configurationSection</find>
       <find>cla</find>
-      <find>getPlayerFile</find>
       <find>save</find>
       <find>totalClaimBlocksInUse</find>
       <find>set</find>
@@ -91,6 +90,8 @@
       <find>list</find>
       <find>setowen</find>
       <find>setowner</find>
+      <find>getPlayerFile</find>
+      <find>totalclaimblocks</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -142,8 +143,8 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="164" />
-    <option name="y" value="23" />
+    <option name="x" value="108" />
+    <option name="y" value="-13" />
     <option name="width" value="1482" />
     <option name="height" value="996" />
   </component>
@@ -153,6 +154,61 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Scope 'Production'; set:Production; class com.intellij.psi.search.scope.ProjectProductionScope">
+          <expand>
+            <path>
+              <item name="plugin" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="plugin" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+            </path>
+            <path>
+              <item name="plugin" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="plugin" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="plugin" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="plugin" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="main" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="plugin" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="plugin" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="main" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="java" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="plugin" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="plugin" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="main" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="java" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="org" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="plugin" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="plugin" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="main" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="java" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="org" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="spigotmc" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="plugin" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="plugin" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -235,61 +291,6 @@
               <item name="bukkit" type="1f31426a:PackageElementNode" />
               <item name="event" type="1f31426a:PackageElementNode" />
               <item name="player" type="1f31426a:PackageElementNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Scope 'Production'; set:Production; class com.intellij.psi.search.scope.ProjectProductionScope">
-          <expand>
-            <path>
-              <item name="plugin" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="plugin" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-            </path>
-            <path>
-              <item name="plugin" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="plugin" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="plugin" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="plugin" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="main" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="plugin" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="plugin" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="main" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="java" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="plugin" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="plugin" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="main" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="java" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="org" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="plugin" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="plugin" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="main" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="java" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="org" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="spigotmc" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
-          <expand>
-            <path>
-              <item name="plugin" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="plugin" type="2674bda8:ScopeViewTreeModel$GroupNode" />
             </path>
           </expand>
           <select />
@@ -436,7 +437,14 @@
       <option name="project" value="LOCAL" />
       <updated>1587138080149</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Buggfixes and new method for fixing claim owners">
+      <created>1587146054043</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1587146054043</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TodoView" selected-index="3">
@@ -452,7 +460,7 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49434572" visible="true" weight="0.1716418" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49434572" visible="true" weight="0.17803837" />
       <window_info id="Structure" order="1" sideWeight="0.5056543" side_tool="true" weight="0.18070363" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -467,9 +475,9 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4989339" weight="0.32936078" />
       <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49626866" weight="0.32936078" />
-      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.31716418" side_tool="true" visible="true" weight="0.27410617" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.33102345" side_tool="true" visible="true" weight="0.27410617" />
       <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.7420043" weight="0.2892741" />
-      <window_info active="true" anchor="bottom" id="Messages" order="10" sideWeight="0.6828358" visible="true" weight="0.27410617" />
+      <window_info active="true" anchor="bottom" id="Messages" order="10" sideWeight="0.66897655" visible="true" weight="0.27410617" />
       <window_info active="true" anchor="bottom" id="GitHub Pull Requests" order="11" sideWeight="0.49946696" weight="0.32936078" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -539,7 +547,8 @@
     <MESSAGE value="No longer have to stand in claim to remove it." />
     <MESSAGE value="Some stuff" />
     <MESSAGE value="Lite smått o gott" />
-    <option name="LAST_COMMIT_MESSAGE" value="Lite smått o gott" />
+    <MESSAGE value="Buggfixes and new method for fixing claim owners" />
+    <option name="LAST_COMMIT_MESSAGE" value="Buggfixes and new method for fixing claim owners" />
   </component>
   <component name="editorHistoryManager">
     <entry file="jar://$MAVEN_REPOSITORY$/com/sk89q/worldguard/worldguard-core/7.0.1-SNAPSHOT/worldguard-core-7.0.1-20190918.194530-43-sources.jar!/com/sk89q/worldguard/protection/managers/storage/RegionDatabase.java">
@@ -831,8 +840,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/spigotmc/plugin.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="419" column="124" lean-forward="true" selection-start-line="419" selection-start-column="124" selection-end-line="419" selection-end-column="124" />
+        <state relative-caret-position="1013">
+          <caret line="712" column="32" lean-forward="true" selection-start-line="712" selection-start-column="32" selection-end-line="712" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

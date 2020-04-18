@@ -19,6 +19,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import net.milkbowl.vault.economy.Economy;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -55,7 +56,7 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
     private int claimBlockPrice;
     private List<String> worlds;
 
-    private static final List<String> donatorFlags = Lists.newArrayList("fly", "greeting-title", "farewell-titel", "time-lock");
+    private static final List<String> donatorFlags = Lists.newArrayList("fly", "greeting-title", "farewell-title", "time-lock");
 
     @Override
     public void onEnable() {
@@ -97,7 +98,7 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                     final RegionContainer regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
                     final RegionManager regionManager = regionContainer.get(BukkitAdapter.adapt(player.getWorld()));
 
-                    if (args[0] != null) {
+                    if (args.length > 0 && args[0] != null) {
                         if (args[0].equalsIgnoreCase("fixowners")) {
                             player.sendMessage("a");
                             for (final ProtectedRegion region : regionManager.getRegions().values()) {
@@ -111,12 +112,104 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                             }
                         }
                         /**
+                         * To get a list of admincommand use the folllowing command
+                         * /claimadmin help
+                         **/
+                        if (args[0].equalsIgnoreCase("help")) {
+                            player.sendMessage(ChatColor.YELLOW+"-------------------- " + adminPrefix + "--------------------");
+                            player.sendMessage(ChatColor.YELLOW+"/claimadmin reload " + ChatColor.WHITE + "- Reloads configuration.");
+                            player.sendMessage(ChatColor.YELLOW+"/claimadmin list <playername>" + ChatColor.WHITE + "- List of players claims.");
+                            player.sendMessage(ChatColor.YELLOW+"/claimadmin giveclaimblocks <player> <amount>" + ChatColor.WHITE + "- Gives player claimblocks.");
+                            player.sendMessage(ChatColor.YELLOW+"/claimadmin removelaimblocks <player> <amount>" + ChatColor.WHITE + "- Removes player claimblocks.");
+                            player.sendMessage(ChatColor.YELLOW+"/claimadmin setowner <playername>" + ChatColor.WHITE + "- Sets owner of claim. Must be stood in the claim.");
+                            player.sendMessage(ChatColor.YELLOW+"/claimadmin removeowner <playername>" + ChatColor.WHITE + "- Removes owner of claim. Must be stood in the claim.");
+                        }
+                        /**
                          * Reload configuration
                          **/
                         if (args[0].equalsIgnoreCase("reload")) {
                             reloadConfig();
                             loadConfig();
                             player.sendMessage(adminPrefix + "Reloaded.");
+                        }
+                        /**
+                         * List of a player claims
+                         * /claimadmin list <playername>
+                         **/
+                        if (args[0].equalsIgnoreCase("list")) {
+                            if(args.length > 0 && args[1] != null) {
+                                final List <String> claims = Lists.newArrayList();
+                                if(Bukkit.getPlayer(args[1]) != null){
+                                    player.sendMessage(adminPrefix + args[1] + "'s claims:");
+                                    for (final ProtectedRegion region : regionManager.getRegions().values()) {
+                                        if (region.getId().contains("claim_" + Bukkit.getPlayer(args[1]).getUniqueId().toString())) {
+                                            claims.add(region.getId());
+                                            player.sendMessage(prefix + "Claim: " + region.getId().split(Bukkit.getPlayer(args[1]).getUniqueId().toString() + "_")[1] +
+                                                    ": x:" + region.getMinimumPoint().getX() + ", z:" + region.getMinimumPoint().getZ() + " (" + region.volume() / 256 + " blocks)");
+                                        }
+                                    }
+                                }
+                                else
+                                    player.sendMessage(adminPrefix+"Player " + args[1] + " is not online!");
+                            }
+                        }
+                        /**
+                         * Give player claimblocks by using the following command:
+                         * /claimadmin giveclaimblocks <playername> <amount>
+                         *  Example: /claimadmin giveclaimblocks goppi 500
+                         **/
+                        if (args[0].equalsIgnoreCase("giveclaimblocks")) {
+                            if(args.length > 0 && args[1] != null && args[2] != null) {
+                                if(Bukkit.getPlayer(args[1]) != null){
+                                    if(StringUtils.isNumeric(args[2])){
+                                        final FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(getPlayerFile(Bukkit.getPlayer(args[1])));
+                                        final int totalClaimBlocks = (Integer) playerConfig.get("player.totalClaimBlocks");
+                                        final int blocks = Integer.parseInt(args[2]);
+                                        playerConfig.set("player.totalClaimBlocks", totalClaimBlocks+blocks);
+                                        try {
+                                            playerConfig.save(new File(Bukkit.getServer().getPluginManager().getPlugin("Claimplugin")
+                                                    .getDataFolder()+"/players/"+Bukkit.getPlayer(args[1]).getUniqueId().toString()+".yml"));
+                                            player.sendMessage(adminPrefix+args[2]+" blocks added to " + args[1] + ".");
+                                        } catch (final IOException e) {
+                                            player.sendMessage(adminPrefix+"Something went wrong while saving user file. Please investigate.");
+                                            e.printStackTrace();
+                                        }
+                                    } else
+                                        player.sendMessage(adminPrefix+"Amount must be numeric!");
+                                }
+                                else
+                                    player.sendMessage(adminPrefix+"Player " + args[1] + " is not online!");
+                            } else
+                                player.sendMessage(adminPrefix+"To get a list of admin commands use /claimadmin help");
+                        }
+                        /**
+                         * Remove claimblocks from player by using the following command:
+                         * /claimadmin removeclaimblocks <playername> <amount>
+                         *  Example: /claimadmin removeclaimblocks goppi 500
+                         **/
+                        if (args[0].equalsIgnoreCase("removeclaimblocks")) {
+                            if(args.length > 0 && args[1] != null && args[2] != null) {
+                                if(Bukkit.getPlayer(args[1]) != null){
+                                    if(StringUtils.isNumeric(args[2])){
+                                        final FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(getPlayerFile(Bukkit.getPlayer(args[1])));
+                                        final int totalClaimBlocks = (Integer) playerConfig.get("player.totalClaimBlocks");
+                                        final int blocks = Integer.parseInt(args[2]);
+                                        playerConfig.set("player.totalClaimBlocks", totalClaimBlocks-blocks);
+                                        try {
+                                            playerConfig.save(new File(Bukkit.getServer().getPluginManager().getPlugin("Claimplugin")
+                                                    .getDataFolder()+"/players/"+Bukkit.getPlayer(args[1]).getUniqueId().toString()+".yml"));
+                                            player.sendMessage(adminPrefix+args[2]+" blocks removed from " + args[1] + ".");
+                                        } catch (final IOException e) {
+                                            player.sendMessage(adminPrefix+"Something went wrong while saving user file. Please investigate.");
+                                            e.printStackTrace();
+                                        }
+                                    } else
+                                        player.sendMessage(adminPrefix+"Amount must be numeric!");
+                                }
+                                else
+                                    player.sendMessage(adminPrefix+"Player " + args[1] + " is not online!");
+                            } else
+                                player.sendMessage(adminPrefix+"To get a list of admin commands use /claimadmin help");
                         }
                         /**
                          * To set owne of a claim the admin must stand in the claim
@@ -262,7 +355,7 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
             if (sender instanceof Player) {
                 player = (Player) sender;
                 try {
-                    if (args[0] != null) {
+                    if (args.length > 0 && args[0] != null) {
                         if (worlds.contains(player.getWorld().getName())) {
                             final FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(getPlayerFile(player));
                             playerConfig.set("player.name", player.getName());
@@ -279,13 +372,18 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                             if (args[0].equalsIgnoreCase("remove")) {
                                 if (args.length >= 2 && args[1] != null) {
                                     if (regionManager.getRegion("claim_" + player.getUniqueId().toString() + "_" + args[1]) != null) {
+                                        int childClaimsVolume = 0;
+                                        for(final ProtectedRegion region : regionManager.getRegions().values())
+                                            if(region.getParent() != null && region.getParent().getId().equalsIgnoreCase("claim_" + player.getUniqueId().toString() + "_" + args[1]))
+                                                childClaimsVolume += region.volume()/256;
+
                                         final List<String> claims = (List<String>) playerConfig.getList("player.claims");
-                                        if (claims.contains("claim_" + player.getUniqueId().toString() + "_" + args[1])) {
-                                            claims.remove("claim_" + player.getUniqueId().toString() + "_" + args[1]);
-                                        }
+                                        //if (claims.contains("claim_" + player.getUniqueId().toString() + "_" + args[1])) {
+                                        //    claims.remove("claim_" + player.getUniqueId().toString() + "_" + args[1]);
+                                        //}
                                         final ProtectedRegion region = regionManager.getRegion("claim_" + player.getUniqueId().toString() + "_" + args[1]);
                                         playerConfig.set("player.claims", claims);
-                                        playerConfig.set("player.totalClaimBlocksInUse", totalClaimBlocksInUse - (region.volume() / 256));
+                                        playerConfig.set("player.totalClaimBlocksInUse", totalClaimBlocksInUse - childClaimsVolume - (region.volume() / 256));
                                         saveToFile(playerConfig, player);
                                         regionManager.removeRegion("claim_" + player.getUniqueId().toString() + "_" + args[1]);
                                         player.sendMessage(prefix + "Claim " + args[1] + " has been removed!");
@@ -445,28 +543,31 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                             /**
                              * To add or remove a member from a claim,
                              * the player must use the command
-                             * /claim add/removemember <playerToRemove> <claimName>
-                             *      Example: /claim addmember goppi house
+                             * /claim add/removemember <claimName> <playerToRemove>
+                             *      Example: /claim addmember house goppi
                              **/
                             if (args[0].equalsIgnoreCase("addmember")) {
                                 if (args.length >= 3 && (args[1] != null && args[2] != null)) {
-                                    if (regionManager.getRegion("claim_" + player.getUniqueId().toString() + "_" + args[2]) != null) {
-                                        regionManager.getRegion("claim_" + player.getUniqueId().toString() + "_" + args[2]).getMembers().addPlayer(args[1]);
-                                        player.sendMessage(ChatColor.YELLOW + "Added " + args[1] + " to the claim!");
+                                    if (regionManager.getRegion("claim_" + player.getUniqueId().toString() + "_" + args[1]) != null) {
+                                        regionManager.getRegion("claim_" + player.getUniqueId().toString() + "_" + args[1]).getMembers().addPlayer(args[2]);
+                                        player.sendMessage(prefix+ "Added " + args[2] + " to the claim!");
                                     } else {
-                                        player.sendMessage(ChatColor.YELLOW + "No claim with that name exist!");
+                                        player.sendMessage(prefix+ "No claim with that name exist!");
                                     }
                                 }
+                                else
+                                    player.sendMessage(prefix+"To add a member use the following command: /claim addmember <claimname> <player>.");
                             }
                             if (args[0].equalsIgnoreCase("removemember")) {
                                 if (args.length >= 3 && (args[1] != null && args[2] != null)) {
-                                    if (regionManager.getRegion("claim_" + player.getUniqueId().toString() + "_" + args[2]) != null) {
-                                        regionManager.getRegion("claim_" + player.getUniqueId().toString() + "_" + args[2]).getMembers().removePlayer(args[1]);
-                                        player.sendMessage(ChatColor.YELLOW + "Removed " + args[1] + " to the claim!");
+                                    if (regionManager.getRegion("claim_" + player.getUniqueId().toString() + "_" + args[1]) != null) {
+                                        regionManager.getRegion("claim_" + player.getUniqueId().toString() + "_" + args[1]).getMembers().removePlayer(args[2]);
+                                        player.sendMessage(prefix+ "Removed " + args[2] + " to the claim!");
                                     } else {
-                                        player.sendMessage(ChatColor.YELLOW + "No claim with that name exist!");
+                                        player.sendMessage(prefix+ "No claim with that name exist!");
                                     }
-                                }
+                                } else
+                                    player.sendMessage(prefix+"To remove a member use the following command: /claim removemember <claimname> <player>.");
                             }
                             /**
                              * To set a falg from a claim the player must
@@ -520,7 +621,8 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                                         regionManager.getRegion("claim_" + player.getUniqueId().toString() + "_" + claimName).setFlags(mapFlags);
                                         player.sendMessage(prefix + "Flag " + flagName + " set to " + flagValue);
                                     }
-                                }
+                                } else
+                                    player.sendMessage(prefix+"To set flag use the followwing command: /claim setflag <claimname> <flag> <value>");
                             }
                             /**
                              * To remove a falg from a claim the player must
@@ -562,6 +664,8 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                                         player.sendMessage(prefix + "Flag " + flagName + " removed from: " + claimName);
                                     }
                                 }
+                                else
+                                    player.sendMessage(prefix+"To remove flag use the followwing command: /claim removeflag <claimname> <flag>");
                             }
                             /**
                              * To buy claimblocks the player must.
@@ -614,22 +718,24 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                              * To get a list of command use the /help command.
                              **/
                             if (args[0].equalsIgnoreCase("help")) {
-                                player.sendMessage(prefix+"List of commands:");
-                                player.sendMessage(ChatColor.YELLOW+"/claim create <claimname>");
-                                player.sendMessage(ChatColor.YELLOW+"/claim remove <claimname>");
-                                player.sendMessage(ChatColor.YELLOW+"/claim list");
-                                player.sendMessage(ChatColor.YELLOW+"/claim setflag <claimname> <flag> <value>");
-                                player.sendMessage(ChatColor.YELLOW+"/claim removeflag <claimname> <flag>");
-                                player.sendMessage(ChatColor.YELLOW+"/claim info");
-                                player.sendMessage(ChatColor.YELLOW+"/claim info <claimname>");
-                                player.sendMessage(ChatColor.YELLOW+"/claim addmember <player> <claimname>");
-                                player.sendMessage(ChatColor.YELLOW+"/claim removemember <player> <claimname>");
-                                player.sendMessage(ChatColor.YELLOW+"/claim buyclaimblocks <amount>");
+                                player.sendMessage(ChatColor.YELLOW + "---------------------- " + prefix + "----------------------");
+                                player.sendMessage(ChatColor.YELLOW+"/claim list" + ChatColor.WHITE+ " - List of your claims.");
+                                player.sendMessage(ChatColor.YELLOW+"/claim info" + ChatColor.WHITE+ " - Info about the claim you are standing in.");
+                                player.sendMessage(ChatColor.YELLOW+"/claim info <claimname>" + ChatColor.WHITE+ " - Info about a specific claim. Must be yours.");
+                                player.sendMessage(ChatColor.YELLOW+"/claim claimblocks" + ChatColor.WHITE+ " - Display how many claimblocks you have.");
+                                player.sendMessage(ChatColor.YELLOW+"/claim buyclaimblocks <amount>" + ChatColor.WHITE+ " - Buy more claimblocks.");
+                                player.sendMessage(ChatColor.YELLOW+"/claim create <claimname>" + ChatColor.WHITE+ " - Create a new claim.");
+                                player.sendMessage(ChatColor.YELLOW+"/claim remove <claimname>" + ChatColor.WHITE+ " - Remove a claim.");
+                                player.sendMessage(ChatColor.YELLOW+"/claim addmember <claimname> <player>" + ChatColor.WHITE+ " - Add member to your claim.");
+                                player.sendMessage(ChatColor.YELLOW+"/claim removemember <claimname> <player>" + ChatColor.WHITE+ " - Remove member from your claim.");
+                                player.sendMessage(ChatColor.YELLOW+"/claim setflag <claimname> <flag> <value>" + ChatColor.WHITE+ " - Set flag to claim.");
+                                player.sendMessage(ChatColor.YELLOW+"/claim removeflag <claimname> <flag>" + ChatColor.WHITE+ " - Remove flag from claim.");
                             }
                         } else {
                             player.sendMessage(prefix + "You must be in the right world to use this command!");
                         }
-                    }
+                    } else
+                        player.sendMessage(prefix+"Use /claim help for a list of commands!");
                 } catch (final Exception e) {
                     e.printStackTrace();
                 }
@@ -678,7 +784,7 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
         switch (flag.toLowerCase()) {
             case "greeting-title":
                 return Flags.GREET_TITLE;
-            case "farwell-title":
+            case "farewell-title":
                 return Flags.FAREWELL_TITLE;
             case "time-lock":
                 return Flags.TIME_LOCK;

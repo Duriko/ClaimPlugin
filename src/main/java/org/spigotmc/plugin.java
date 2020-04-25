@@ -480,7 +480,7 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                                                 region.setPriority(1);
                                             }
                                             final int regionSize = region.volume() / 256;
-                                            if(regionSize > 50){
+                                            if((p2.getX() - p1.getX() >= 5 ) && (p2.getZ() - p1.getZ() >= 5)) {
                                                 if (totalClaimBlocksInUse + regionSize <= totalClaimBlocks) {
                                                     regionManager.addRegion(region);
                                                     final DefaultDomain owner = region.getOwners();
@@ -498,14 +498,12 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                                                     fileservice.saveToFile(playerConfig, player);
                                                 } else
                                                     player.sendMessage(Configuration.PREFIX + "Not enough claimblocks! You need " + ((totalClaimBlocksInUse + regionSize) - totalClaimBlocks) + " blocks more!");
-                                            }else
-                                                player.sendMessage(Configuration.PREFIX+"Claim not big enough!");
-                                        } else {
+                                            } else
+                                                player.sendMessage(Configuration.PREFIX+"Claim not big enough! Claims must be atleast 6x6 wide.");
+                                        } else
                                             player.sendMessage(Configuration.PREFIX + "Claim with that name already exist");
-                                        }
-                                    } else {
+                                    } else
                                         player.sendMessage(Configuration.PREFIX + "You must specify a claim name!");
-                                    }
                                 } catch (final Exception ex) {
                                     ex.printStackTrace();
                                 }

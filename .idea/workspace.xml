@@ -7,13 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="74ae4e79-0e78-4036-82d6-393fc7930edd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/services/BlockUpdateService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/services/BlockUpdateServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/spigotmc/Configuration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/spigotmc/Configuration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/spigotmc/StickListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/spigotmc/PlayerEventHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/spigotmc/plugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/spigotmc/plugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/spigotmc/plugin.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/spigotmc/plugin.class" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -37,8 +32,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/spigotmc/plugin.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-531">
-              <caret line="801" column="138" lean-forward="true" selection-start-line="801" selection-start-column="138" selection-end-line="801" selection-end-column="138" />
+            <state relative-caret-position="476">
+              <caret line="509" column="32" selection-start-line="509" selection-start-column="32" selection-end-line="509" selection-end-column="32" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -160,10 +155,10 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="976" />
-    <option name="height" value="1056" />
+    <option name="x" value="319" />
+    <option name="y" value="-23" />
+    <option name="width" value="1482" />
+    <option name="height" value="996" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -483,7 +478,14 @@
       <option name="project" value="LOCAL" />
       <updated>1587288552359</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Implemented rename and expansion of claims. New service. Few bug fixes.">
+      <created>1587823234058</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1587823234058</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TodoView" selected-index="3">
@@ -497,6 +499,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49434572" visible="true" weight="0.20362474" />
       <window_info id="Structure" order="1" sideWeight="0.5056543" side_tool="true" weight="0.18070363" />
@@ -513,9 +516,9 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4989339" weight="0.32936078" />
       <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49626866" weight="0.32936078" />
-      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.44402984" side_tool="true" visible="true" weight="0.27410617" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.445629" side_tool="true" visible="true" weight="0.27410617" />
       <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.7420043" weight="0.2892741" />
-      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.55597013" visible="true" weight="0.27410617" />
+      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.554371" visible="true" weight="0.27410617" />
       <window_info active="true" anchor="bottom" id="GitHub Pull Requests" order="11" sideWeight="0.49946696" weight="0.32936078" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -588,7 +591,8 @@
     <MESSAGE value="Buggfixes and new method for fixing claim owners" />
     <MESSAGE value="Buggfixes and new commands for admins." />
     <MESSAGE value="Some refactoring and new Sticklistener feature." />
-    <option name="LAST_COMMIT_MESSAGE" value="Some refactoring and new Sticklistener feature." />
+    <MESSAGE value="Implemented rename and expansion of claims. New service. Few bug fixes." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented rename and expansion of claims. New service. Few bug fixes." />
   </component>
   <component name="editorHistoryManager">
     <entry file="jar://$MAVEN_REPOSITORY$/com/sk89q/worldguard/worldguard-core/7.0.1-SNAPSHOT/worldguard-core-7.0.1-20190918.194530-43-sources.jar!/com/sk89q/worldguard/protection/regions/ProtectedRegion.java">
@@ -913,8 +917,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/spigotmc/plugin.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-531">
-          <caret line="801" column="138" lean-forward="true" selection-start-line="801" selection-start-column="138" selection-end-line="801" selection-end-column="138" />
+        <state relative-caret-position="476">
+          <caret line="509" column="32" selection-start-line="509" selection-start-column="32" selection-end-line="509" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

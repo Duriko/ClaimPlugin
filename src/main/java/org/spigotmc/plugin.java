@@ -32,8 +32,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import services.BlockUpdateService;
-import services.BlockUpdateServiceImpl;
+import services.ClientService;
+import services.ClientServiceImpl;
 import services.Fileservice;
 import services.FileserviceImpl;
 
@@ -54,7 +54,7 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
     private Economy economy;
     private ConfigurationSection configurationSection;
     private Fileservice fileservice;
-    private BlockUpdateService blockUpdateService;
+    private ClientService clientService;
 
     private boolean totalBlockLimit;
     private int totalBlockAmountLimit;
@@ -65,7 +65,7 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
     public void onEnable() {
         final Logger logger = getLogger();
         fileservice = new FileserviceImpl();
-        blockUpdateService = new BlockUpdateServiceImpl();
+        clientService = new ClientServiceImpl();
         logger.info("Loaded services");
         final File f = new File(Bukkit.getServer().getPluginManager().getPlugin("Claimplugin").getDataFolder() + "/");
         if(!f.exists()) {
@@ -412,7 +412,7 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                                         playerConfig.set("player.totalClaimBlocksInUse", totalClaimBlocksInUse - childClaimsVolume - (region.volume() / 256));
                                         fileservice.saveToFile(playerConfig, player);
                                         regionManager.removeRegion("claim_" + player.getUniqueId().toString() + "_" + args[1]);
-                                        blockUpdateService.resetClaimBorder(player, region);
+                                        clientService.resetClaimBorder(player, region);
                                         player.sendMessage(Configuration.PREFIX + "Claim " + args[1] + " has been removed!");
                                         return true;
                                     } else {
@@ -466,7 +466,6 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                                         if (regionManager.getRegion("claim_" + player.getUniqueId().toString() + "_" + args[1]) == (null)) {
                                             final ProtectedRegion region = new ProtectedCuboidRegion("claim_" + player.getUniqueId().toString() + "_" + args[1],
                                                     BlockVector3.at(p1.getBlockX(), 0, p1.getBlockZ()), BlockVector3.at(p2.getBlockX(), 255, p2.getBlockZ()));
-                                            player.sendMessage(region.getIntersectingRegions(regionManager.getRegions().values())+ "");
                                             final List<ProtectedRegion> overlapingClaims = region.getIntersectingRegions(regionManager.getRegions().values());
                                             if(parentRegion != null) {
                                                 region.setParent(parentRegion);
@@ -772,65 +771,68 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                              **/
                             if (args[0].equalsIgnoreCase("expand")) {
                                 if (args.length >= 2 && (args[1] != null)) {
-
-                                    final ApplicableRegionSet regionList = regionManager.getApplicableRegions(BlockVector3.at(player.getLocation().getX(),
-                                            player.getLocation().getY(), player.getLocation().getZ()));
-                                    if(!regionList.getRegions().isEmpty()) {
-                                        for (final ProtectedRegion region : regionList) {
-                                            if (region.getId().startsWith("claim_"+player.getUniqueId().toString())) {
-                                                final BlockVector3 p1 = region.getMinimumPoint();
-                                                final BlockVector3 p2 = region.getMaximumPoint();
-                                                ProtectedRegion newRegion = null;
-                                                if(player.getFacing() == BlockFace.NORTH) {
-                                                    newRegion = new ProtectedCuboidRegion(region.getId(), p1.subtract(0,0,Integer.valueOf(args[1])), p2);
-                                                } else if(player.getFacing() == BlockFace.SOUTH){
-                                                    newRegion = new ProtectedCuboidRegion(region.getId(), p1, p2.add(0,0, Integer.valueOf(args[1])));
-                                                } else if(player.getFacing() == BlockFace.WEST){
-                                                    newRegion = new ProtectedCuboidRegion(region.getId(), p1.subtract(Integer.valueOf(args[1]),0,0), p2);
-                                                } else if(player.getFacing() == BlockFace.EAST) {
-                                                    newRegion = new ProtectedCuboidRegion(region.getId(),p1, p2.add(Integer.valueOf(args[1]),0, 0));
-                                                } else {
-                                                    player.sendMessage(Configuration.PREFIX+"Something went wrong! Please contact an administrator.");
-                                                    return false;
-                                                }
-                                                if(newRegion.getIntersectingRegions(regionManager.getRegions().values()).size() > 0) {
-                                                    for (final ProtectedRegion overlapingClaim : newRegion.getIntersectingRegions(regionManager.getRegions().values())) {
-                                                        if(overlapingClaim.getParent() == null && overlapingClaim.getId() != newRegion.getId()) {
-                                                            if(region.getParent() != null && region.getParent().getId() == overlapingClaim.getId()) {
-                                                                player.sendMessage(Configuration.PREFIX+"You can not expand a child claim!");
-                                                                return false;
-                                                            } else {
-                                                                player.sendMessage(Configuration.PREFIX+"Expansion failed! Claim overlaps another claim.");
-                                                                return false;
+                                    if(args[1].matches("[1-9]\\d*")) {
+                                        final int amount = Integer.valueOf(args[1]);
+                                        final ApplicableRegionSet regionList = regionManager.getApplicableRegions(BlockVector3.at(player.getLocation().getX(),
+                                                player.getLocation().getY(), player.getLocation().getZ()));
+                                        if(!regionList.getRegions().isEmpty()) {
+                                            for (final ProtectedRegion region : regionList) {
+                                                if (region.getId().startsWith("claim_"+player.getUniqueId().toString())) {
+                                                    final BlockVector3 p1 = region.getMinimumPoint();
+                                                    final BlockVector3 p2 = region.getMaximumPoint();
+                                                    ProtectedRegion newRegion = null;
+                                                    if(player.getFacing() == BlockFace.NORTH) {
+                                                        newRegion = new ProtectedCuboidRegion(region.getId(), p1.subtract(0,0,Integer.valueOf(amount)), p2);
+                                                    } else if(player.getFacing() == BlockFace.SOUTH){
+                                                        newRegion = new ProtectedCuboidRegion(region.getId(), p1, p2.add(0,0, Integer.valueOf(amount)));
+                                                    } else if(player.getFacing() == BlockFace.WEST){
+                                                        newRegion = new ProtectedCuboidRegion(region.getId(), p1.subtract(Integer.valueOf(amount),0,0), p2);
+                                                    } else if(player.getFacing() == BlockFace.EAST) {
+                                                        newRegion = new ProtectedCuboidRegion(region.getId(),p1, p2.add(Integer.valueOf(amount),0, 0));
+                                                    } else {
+                                                        player.sendMessage(Configuration.PREFIX+"Something went wrong! Please contact an administrator.");
+                                                        return false;
+                                                    }
+                                                    if(newRegion.getIntersectingRegions(regionManager.getRegions().values()).size() > 0) {
+                                                        for (final ProtectedRegion overlapingClaim : newRegion.getIntersectingRegions(regionManager.getRegions().values())) {
+                                                            if(overlapingClaim.getParent() == null && overlapingClaim.getId() != newRegion.getId()) {
+                                                                if(region.getParent() != null && region.getParent().getId() == overlapingClaim.getId()) {
+                                                                    player.sendMessage(Configuration.PREFIX+"You can not expand a child claim!");
+                                                                    return false;
+                                                                } else {
+                                                                    player.sendMessage(Configuration.PREFIX+"Expansion failed! Claim overlaps another claim.");
+                                                                    return false;
+                                                                }
                                                             }
                                                         }
                                                     }
-                                                }
-                                                final int newVolume = (newRegion.volume()/256) - (region.volume()/256);
-                                                if((totalClaimBlocksInUse + newVolume) <= totalClaimBlocks) {
-                                                    playerConfig.set("player.totalClaimBlocksInUse", totalClaimBlocksInUse + newVolume);
-                                                    for (final ProtectedRegion claim : regionManager.getRegions().values()) {
-                                                        if(claim.getParent() != null && claim.getParent().getId().equalsIgnoreCase(region.getId())){
-                                                            claim.clearParent();
-                                                            claim.setParent(newRegion);
+                                                    final int newVolume = (newRegion.volume()/256) - (region.volume()/256);
+                                                    if((totalClaimBlocksInUse + newVolume) <= totalClaimBlocks) {
+                                                        playerConfig.set("player.totalClaimBlocksInUse", totalClaimBlocksInUse + newVolume);
+                                                        for (final ProtectedRegion claim : regionManager.getRegions().values()) {
+                                                            if(claim.getParent() != null && claim.getParent().getId().equalsIgnoreCase(region.getId())){
+                                                                claim.clearParent();
+                                                                claim.setParent(newRegion);
+                                                            }
                                                         }
-                                                    }
-                                                    blockUpdateService.resetClaimBorder(player, region);
-                                                    newRegion.copyFrom(region);
-                                                    regionManager.removeRegion(region.getId());
-                                                    regionManager.addRegion(newRegion);
-                                                    fileservice.saveToFile(playerConfig, player);
-                                                    player.sendMessage(Configuration.PREFIX + "Claim expanded!");
-                                                    return true;
-                                                } else
-                                                    player.sendMessage(Configuration.PREFIX + "You do not have enough claimblocks! You need " +
-                                                            ((totalClaimBlocksInUse+newVolume)-totalClaimBlocks) + " more blocks.");
+                                                        clientService.resetClaimBorder(player, region);
+                                                        newRegion.copyFrom(region);
+                                                        regionManager.removeRegion(region.getId());
+                                                        regionManager.addRegion(newRegion);
+                                                        fileservice.saveToFile(playerConfig, player);
+                                                        player.sendMessage(Configuration.PREFIX + "Claim expanded!");
+                                                        return true;
+                                                    } else
+                                                        player.sendMessage(Configuration.PREFIX + "You do not have enough claimblocks! You need " +
+                                                                ((totalClaimBlocksInUse+newVolume)-totalClaimBlocks) + " more blocks.");
+                                                }
                                             }
                                         }
-                                    }
-                                    else {
-                                        player.sendMessage(Configuration.PREFIX + "You are not standing in your claim.");
-                                    }
+                                        else {
+                                            player.sendMessage(Configuration.PREFIX + "You are not standing in your claim.");
+                                        }
+                                    } else
+                                        player.sendMessage(Configuration.PREFIX + "Invalid amount: " + args[1] +  ".");
                                 }
                                 return true;
                             }
@@ -851,7 +853,7 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                                                 claim.setParent(newRegion);
                                             }
                                         }
-                                        blockUpdateService.resetClaimBorder(player, region);
+                                        clientService.resetClaimBorder(player, region);
                                         newRegion.copyFrom(region);
                                         regionManager.addRegion(newRegion);
                                         regionManager.removeRegion(region.getId());
@@ -881,6 +883,8 @@ public final class plugin extends JavaPlugin implements CommandExecutor {
                                 player.sendMessage(ChatColor.YELLOW+"/claim flags" + ChatColor.WHITE+ " - Information about flags.");
                                 player.sendMessage(ChatColor.YELLOW+"/claim setflag <claimname> <flag> <value>" + ChatColor.WHITE+ " - Set flag to claim.");
                                 player.sendMessage(ChatColor.YELLOW+"/claim removeflag <claimname> <flag>" + ChatColor.WHITE+ " - Remove flag from claim.");
+                                player.sendMessage(ChatColor.YELLOW+"/claim rename <claimname> <newClaimName>" + ChatColor.WHITE + " - Rename a claim.");
+                                player.sendMessage(ChatColor.YELLOW+"/claim expand <amount>" + ChatColor.WHITE + " - Expand a claim in the direction you are facing.");
                                 return true;
                             }
                             player.sendMessage(Configuration.PREFIX+"Invalid command. Type /claim help for a list of commands.");

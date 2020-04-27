@@ -19,8 +19,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import services.BlockUpdateService;
-import services.BlockUpdateServiceImpl;
+import services.ClientService;
+import services.ClientServiceImpl;
 
 import java.util.List;
 import java.util.Map;
@@ -31,13 +31,13 @@ public class PlayerEventHandler implements Listener {
     private static WorldEditPlugin worldEdit;
     private static ConfigurationSection configurationSection;
     private static List<String> worlds;
-    private static BlockUpdateService blockUpdateService;
+    private static ClientService clientService;
 
     public PlayerEventHandler(final WorldEditPlugin worldEdit, final ConfigurationSection configurationSection) {
         this.worldEdit = worldEdit;
         this.configurationSection = configurationSection;
         worlds = (List<String>) configurationSection.getList("worlds");
-        blockUpdateService = new BlockUpdateServiceImpl();
+        clientService = new ClientServiceImpl();
     }
 
     @EventHandler
@@ -90,9 +90,9 @@ public class PlayerEventHandler implements Listener {
                         }
                     }
                     if(region.getParent() != null)
-                        blockUpdateService.resetClaimBorder(player, region);
+                        clientService.resetClaimBorder(player, region);
                     if(region.getParent() == null)
-                        blockUpdateService.resetClaimBorder(player, region);
+                        clientService.resetClaimBorder(player, region);
                 }
             }
         }
@@ -122,10 +122,10 @@ public class PlayerEventHandler implements Listener {
                             player.sendMessage(ChatColor.YELLOW + "Claim id: " + region.getId().substring(43, region.getId().length()));
                             if (region.getParent() != null){
                                 player.sendMessage(ChatColor.YELLOW + "Claim parent: " + region.getParent().getId().split("_" + player.getUniqueId() + "_")[1]);
-                                blockUpdateService.displayClaimBorder(player, region, true);
+                                clientService.displayClaimBorder(player, region, true);
                             }
                             else
-                                blockUpdateService.displayClaimBorder(player, region, false);
+                                clientService.displayClaimBorder(player, region, false);
                           player.sendMessage(ChatColor.YELLOW + "Claim coords: " + region.getMinimumPoint() + " - " + region.getMaximumPoint());
                             String tmp = "";
                             final Map map = region.getFlags();

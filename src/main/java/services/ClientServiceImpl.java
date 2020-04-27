@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 
-public class BlockUpdateServiceImpl implements BlockUpdateService {
+public class ClientServiceImpl implements ClientService {
 
     @Override
     public void displayClaimBorder(final Player player, final ProtectedRegion region, final boolean childClaim) {
@@ -25,9 +25,9 @@ public class BlockUpdateServiceImpl implements BlockUpdateService {
             for(int i = 0; i< amount; i++) {
                 final int abc = minX + midX - tmp;
                 final int abc2 = minX + midX + tmp;
-                player.sendBlockChange(new Location(player.getWorld(), abc, player.getWorld().getHighestBlockYAt(abc, maxZ), minZ), Material.GLOWSTONE.createBlockData());
+                player.sendBlockChange(new Location(player.getWorld(), abc, player.getWorld().getHighestBlockYAt(abc, minZ), minZ), Material.GLOWSTONE.createBlockData());
                 player.sendBlockChange(new Location(player.getWorld(), abc, player.getWorld().getHighestBlockYAt(abc, maxZ), maxZ), Material.GLOWSTONE.createBlockData());
-                player.sendBlockChange(new Location(player.getWorld(), abc2, player.getWorld().getHighestBlockYAt(abc2, maxZ), minZ), Material.GLOWSTONE.createBlockData());
+                player.sendBlockChange(new Location(player.getWorld(), abc2, player.getWorld().getHighestBlockYAt(abc2, minZ), minZ), Material.GLOWSTONE.createBlockData());
                 player.sendBlockChange(new Location(player.getWorld(), abc2, player.getWorld().getHighestBlockYAt(abc2, maxZ), maxZ), Material.GLOWSTONE.createBlockData());
                 tmp+= 5;
             }
@@ -38,10 +38,10 @@ public class BlockUpdateServiceImpl implements BlockUpdateService {
             for(int i = 0; i< amount; i++) {
                 final int abc = minZ + midZ - tmp;
                 final int abc2 = minZ + midZ + tmp;
-                player.sendBlockChange(new Location(player.getWorld(), minX, player.getWorld().getHighestBlockYAt(maxX, abc), abc), Material.GLOWSTONE.createBlockData());
+                player.sendBlockChange(new Location(player.getWorld(), minX, player.getWorld().getHighestBlockYAt(minX, abc), abc), Material.GLOWSTONE.createBlockData());
                 player.sendBlockChange(new Location(player.getWorld(), maxX, player.getWorld().getHighestBlockYAt(maxX, abc), abc), Material.GLOWSTONE.createBlockData());
-                player.sendBlockChange(new Location(player.getWorld(), minX, player.getWorld().getHighestBlockYAt(maxX, abc2), abc2), Material.GLOWSTONE.createBlockData());
-                player.sendBlockChange(new Location(player.getWorld(), maxX, player.getWorld().getHighestBlockYAt(maxX, abc), abc2), Material.GLOWSTONE.createBlockData());
+                player.sendBlockChange(new Location(player.getWorld(), minX, player.getWorld().getHighestBlockYAt(minX, abc2), abc2), Material.GLOWSTONE.createBlockData());
+                player.sendBlockChange(new Location(player.getWorld(), maxX, player.getWorld().getHighestBlockYAt(maxX, abc2), abc2), Material.GLOWSTONE.createBlockData());
                 tmp+= 5;
             }
         }
@@ -78,9 +78,9 @@ public class BlockUpdateServiceImpl implements BlockUpdateService {
             for(int i = 0; i< amount; i++) {
                 final int abc = minX + midX - tmp;
                 final int abc2 = minX + midX + tmp;
-                resetBlock(player, abc, abc, maxZ, minZ);
+                resetBlock(player, abc, abc, minZ, minZ);
                 resetBlock(player, abc, abc, maxZ, maxZ);
-                resetBlock(player, abc2, abc2, maxZ, minZ);
+                resetBlock(player, abc2, abc2, minZ, minZ);
                 resetBlock(player, abc2, abc2, maxZ, maxZ);
                 tmp+= 5;
             }

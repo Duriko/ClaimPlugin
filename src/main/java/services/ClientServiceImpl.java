@@ -98,11 +98,6 @@ public class ClientServiceImpl implements ClientService {
                 tmp+= 5;
             }
         }
-        //Four middle
-        resetBlock(player, minX+midX, minX+midX, maxZ, minZ);
-        resetBlock(player, minX+midX, minX+midX, maxZ, maxZ);
-        resetBlock(player, minX, minX, maxZ-midZ, maxZ-midZ);
-        resetBlock(player, maxX, minX, maxZ-midZ, maxZ-midZ);
         //Four edges
         resetBlock(player, minX, minX, minZ, minZ);
         resetBlock(player, minX, minX, maxZ, maxZ);
@@ -119,10 +114,8 @@ public class ClientServiceImpl implements ClientService {
         resetBlock(player, maxX-1, maxX, maxZ, maxZ);
     }
 
-    @Override
-    public void resetBlock(final Player player, final int x, final int midX, final int midZ, final int z) {
+    private static void resetBlock(final Player player, final int x, final int midX, final int midZ, final int z) {
         player.sendBlockChange(new Location(player.getWorld(), x, player.getWorld().getHighestBlockYAt(midX, midZ), z),
                 player.getWorld().getBlockAt(x, player.getWorld().getHighestBlockYAt(midX, midZ), z).getType().createBlockData());
     }
-
 }
